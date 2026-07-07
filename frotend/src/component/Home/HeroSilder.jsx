@@ -6,6 +6,8 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getBanners } from "../../actions/bannerAction";
 import { colors, typography } from "../theme";
 
 const useStyles = makeStyles((theme) => ({
@@ -204,7 +206,7 @@ const buttonVariants = {
   },
 };
 
-const slides = [
+const defaultSlides = [
   {
     image: require("../../Image/Cricket-wepon/img2.png"),
     tagline: "Premium Cricket Gear",
@@ -239,13 +241,36 @@ const slides = [
 
 export default function HeroSlider() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { banners } = useSelector((state) => state.bannersList);
   const [activeStep, setActiveStep] = useState(0);
   const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    dispatch(getBanners());
+  }, [dispatch]);
+
+  const slides =
+    banners && banners.length > 0
+      ? banners.map((banner) => ({
+          image: banner.image?.url,
+          tagline: banner.tagline,
+          quote: banner.quote,
+          saleText: banner.saleText,
+          productText: banner.productText || "Shop Now",
+        }))
+      : defaultSlides;
 
   // Reset animation key when slide changes
   useEffect(() => {
     setKey((prev) => prev + 1);
   }, [activeStep]);
+
+  useEffect(() => {
+    if (activeStep >= slides.length) {
+      setActiveStep(0);
+    }
+  }, [slides.length, activeStep]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => (prevActiveStep + 1) % slides.length);

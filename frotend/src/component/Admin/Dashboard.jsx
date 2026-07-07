@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BarChart } from "@material-ui/icons";
 import Highcharts from "highcharts";
-import { ShoppingCart, AssignmentInd, People } from "@material-ui/icons";
+import { ShoppingCart, AssignmentInd, People, BarChart } from "@material-ui/icons";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts3D from "highcharts/highcharts-3d";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,387 +14,393 @@ import Navbar from "./Navbar";
 import Sidebar from "./Siderbar";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import ProductImg from "../../Image/admin/products.png";
-import ordersImg from "../../Image/admin/order.png";
-import usersImg from "../../Image/admin/user.png"; 
+
 Highcharts3D(Highcharts);
 
 const useStyles = makeStyles((theme) => ({
-  dashboard: {
+  root: {
     display: "flex",
     alignItems: "flex-start",
-    backgroundColor: "#f1f1f1",
-    justifyContent: "center",
+    background: "#f4f5f7",
+    minHeight: "100vh",
     width: "100%",
-    gap: "1rem",
-    overflow: "hidden",
-    margin: 0,
-    padding: 0,
+    fontFamily: "'Inter', sans-serif",
   },
-  firstBox: {
-    width: "20%",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    [theme.breakpoints.down("999")]: {
-      display: "none",
-    },
+  sidebarCol: {
+    width: "240px",
+    minWidth: "240px",
+    flexShrink: 0,
+    height: "100vh",
+    position: "sticky",
+    top: 0,
+    [theme.breakpoints.down("999")]: { display: "none" },
   },
-
   toggleBox: {
-    width: "16rem",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    zIndex: "100",
-    position: "absolute",
-    top: "58px",
-    left: "17px",
+    width: "240px",
+    height: "100vh",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    boxShadow: "4px 0 24px rgba(0,0,0,0.5)",
   },
-  secondBox: {
-    width: "75%",
-    height: "fit-content",
+  mainCol: {
+    flex: 1,
+    minWidth: 0,
     display: "flex",
     flexDirection: "column",
-    gap: "1rem",
-    justifyContent: "center",
-    [theme.breakpoints.down("999")]: {
-      width: "100%",
-    },
+    background: "#f4f5f7",
   },
-  navBar: {
-    margin: "0rem",
-  },
-  summaryCard: {
-    display: "flex",
-    justifyContent: "center",
-    color: "white",
-    width: "100%",
-    height: "15rem",
-    gap: "1rem",
-    margin: "1rem 0 0 0",
-
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-      height: "20rem",
-      alignItems: "center",
-      marginTop: "7rem !important",
-    },
-  },
-  cardContainer: {
+  pageBody: {
+    padding: "1.5rem",
     display: "flex",
     flexDirection: "column",
+    gap: "1.5rem",
+  },
+  pageHeading: {
+    display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#414141",
-    margin: "0 1rem ",
-    width: "30%",
-    height: "10rem",
-
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    transition: "transform 0.2s ease-in-out",
-    cursor: "pointer",
-    "&:hover": {
-      transform: "scale(1.1) !important",
-      backgroundColor: "#ed1c24 ",
-      boxShadow: "0px 0px 10px rgba(0, 0, 0, black) !important",
-    },
-    [theme.breakpoints.between("sm", "md")]: {
-      width: "32% !important",
-      marginBottom: "1rem !important",
-      padding: "1rem 2rem ! important",
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "85% !important",
-      marginBottom: "1rem !important",
-      padding: "2rem 2rem ! important",
-    },
-    [theme.breakpoints.down("xs")]: {
-      width: "85%",
-
-      padding: "1.2rem",
-      margin: "0   auto",
-      marginBottom: "1rem",
-      "&:hover": {
-        transform: "scale(1.05) !important",
-      },
-    },
+    gap: "10px",
+    marginBottom: "0.25rem",
   },
-  textContainer: {
-    marginTop: "0.5rem",
-    textAlign: "center",
-    color: "white",
-    textShadow: "1px 1px 2px black",
+  headingDot: {
+    width: "10px",
+    height: "10px",
+    borderRadius: "50%",
+    background: "#dc2626",
+    boxShadow: "0 0 8px rgba(220,38,38,0.7)",
+    animation: "$pulse 2s infinite",
   },
-  heading: {
-    fontSize: "20px",
+  "@keyframes pulse": {
+    "0%, 100%": { opacity: 1 },
+    "50%": { opacity: 0.3 },
+  },
+  headingText: {
+    fontSize: "0.68rem",
     fontWeight: 800,
-    marginBottom: "0.5rem",
-    textShadow: "1px 1px 2px black",
-    [theme.breakpoints.down("md")]: {
-      fontSize: "18px",
-    },
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "22px",
-    },
+    color: "#111111",
+    letterSpacing: "2.5px",
+    textTransform: "uppercase",
   },
-  number: {
-    fontSize: "1.5rem",
-    fontWeight: 500,
-    textShadow: "1px 1px 2px black",
-  },
-  headerConetnt: {
-    display: "flex",
+
+  /* ── Stat Cards ── */
+  statsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
     gap: "1rem",
-    alignItems: "center",
-    color: "white",
-
-    [theme.breakpoints.down("md")]: {
-      "& svg": {
-        fontSize: "2rem",
-      },
+    [theme.breakpoints.down("md")]: { gridTemplateColumns: "repeat(2, 1fr)" },
+    [theme.breakpoints.down("sm")]: { gridTemplateColumns: "1fr" },
+  },
+  statCard: {
+    background: "#ffffff",
+    borderRadius: "14px",
+    padding: "1.25rem",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    position: "relative",
+    overflow: "hidden",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: "3px",
+      background: "linear-gradient(90deg, #dc2626, #ef4444)",
+      transform: "scaleX(0)",
+      transformOrigin: "left",
+      transition: "transform 0.3s ease",
     },
-
-    [theme.breakpoints.down("sm")]: {
-      "& svg": {
-        fontSize: "3rem",
-      },
+    "&:hover": {
+      boxShadow: "0 8px 24px rgba(220,38,38,0.18)",
+      transform: "translateY(-3px)",
+      borderColor: "rgba(220, 38, 38, 0.35)",
+      "&::after": { transform: "scaleX(1)" },
     },
   },
-  revenue: {
-    width: "100%",
-    height: "fit-content",
+  statTop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "1rem",
+  },
+  statIconBox: {
+    width: "64px",
+    height: "64px",
+    borderRadius: "14px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    margin: "-2.5rem auto 0",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-      marginTop: "5rem !important",
-    },
+    "& svg": { color: "#fff", fontSize: "2.35rem" },
   },
-  doughnutChart: {
-    height: "fit-content",
-    width: "42%",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    padding: "1rem 2rem",
-    margin: "0 1rem",
-    [theme.breakpoints.down("md")]: {
-      width: "30%",
-      padding: "1rem 3rem",
-      ".highcharts-background": {
-        height: "350px !important",
-      },
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "85%",
-      padding: "2rem",
-      marginTop: "2rem",
-    },
+  statChange: {
+    fontSize: "0.72rem",
+    fontWeight: 600,
+    color: "#22c55e",
+    background: "rgba(34, 197, 94, 0.1)",
+    padding: "2px 10px",
+    borderRadius: "20px",
+  },
+  statValue: {
+    fontSize: "2rem",
+    fontWeight: 800,
+    color: "#111111",
+    letterSpacing: "-1px",
+    lineHeight: 1,
+    marginBottom: "4px",
+  },
+  statLabel: {
+    fontSize: "0.78rem",
+    color: "#6b7280",
+    fontWeight: 500,
+  },
 
-    [theme.breakpoints.down("xs")]: {
-      width: "85%",
-      marginBottom: "1rem",
-      padding: "1.2rem",
+  /* ── Charts ── */
+  chartsGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "1rem",
+    [theme.breakpoints.down("sm")]: { gridTemplateColumns: "1fr" },
+  },
+  chartCard: {
+    background: "#ffffff",
+    borderRadius: "14px",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    padding: "1.25rem",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+    position: "relative",
+    overflow: "hidden",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: "3px",
+      background: "linear-gradient(90deg, #dc2626, #ef4444)",
     },
   },
-  revnueContainer: {
-    width: "42%",
+  chartLabel: {
+    fontSize: "0.68rem",
+    fontWeight: 700,
+    color: "#111111",
+    letterSpacing: "2px",
+    textTransform: "uppercase",
+    marginBottom: "1rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    "&::before": {
+      content: '""',
+      width: "6px",
+      height: "6px",
+      borderRadius: "50%",
+      background: "#dc2626",
+      display: "inline-block",
+    },
+  },
+  lineChartCard: {
+    background: "#ffffff",
+    borderRadius: "14px",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    padding: "1.25rem",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+    position: "relative",
+    overflow: "hidden",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: "3px",
+      background: "linear-gradient(90deg, #dc2626, #ef4444, #f4f5f7)",
+    },
+  },
+  revenueCard: {
+    background: "#dc2626",
+    borderRadius: "14px",
+    border: "1px solid rgba(220, 38, 38, 0.3)",
+    padding: "1.5rem",
+    boxShadow: "0 8px 32px rgba(220,38,38,0.3)",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
     justifyContent: "center",
-    margin: "0 1rem",
-    height: "400px",
-    backgroundColor: "black",
-    borderRadius: "5px",
-    padding: "1rem 2rem",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    transition: "background-color 0.3s",
-
-    [theme.breakpoints.down("sm")]: {
-      width: "85% !important",
-      padding: "1rem",
-      height: "250px",
-    },
-
-    [theme.breakpoints.down("md")]: {
-      width: "30%",
-      padding: "1rem 3rem",
-    },
-    [theme.breakpoints.down("sm")]: {
-      marginTop: "1rem",
-      width: "85% !important",
-      padding: "2rem !important",
-      height: "250px",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "85%",
-      marginBottom: "1rem",
-      padding: "1rem !important",
+    position: "relative",
+    overflow: "hidden",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: "-30px",
+      right: "-30px",
+      width: "120px",
+      height: "120px",
+      borderRadius: "50%",
+      background: "radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%)",
     },
   },
-  lineChart: {
-    width: "90%",
-    height: "fit-content",
-    backgroundColor: "white",
+  revenueIcon: {
+    width: "64px",
+    height: "64px",
+    borderRadius: "14px",
+    background: "rgba(255,255,255,0.2)",
+    display: "flex",
     alignItems: "center",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    padding: "2rem",
-    margin: "1rem auto",
-
-    [theme.breakpoints.down("sm")]: {
-      width: "85%",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "85%",
-      marginBottom: "1rem",
-      padding: "1.2rem",
-    },
+    justifyContent: "center",
+    marginBottom: "1rem",
+    "& svg": { color: "#ffffff", fontSize: "2.35rem" },
+  },
+  revenueLabel: {
+    fontSize: "0.68rem",
+    fontWeight: 700,
+    color: "rgba(255,255,255,0.8)",
+    letterSpacing: "2px",
+    textTransform: "uppercase",
+    marginBottom: "0.4rem",
+  },
+  revenueValue: {
+    fontSize: "2.2rem",
+    fontWeight: 800,
+    color: "#ffffff",
+    letterSpacing: "-1.5px",
+    lineHeight: 1,
+  },
+  revenueSubText: {
+    fontSize: "0.75rem",
+    color: "rgba(255,255,255,0.8)",
+    fontWeight: 600,
+    marginTop: "0.5rem",
   },
 }));
+
+const statConfigs = [
+  {
+    label: "Total Products",
+    key: "products",
+    route: "/admin/products",
+    icon: <ShoppingCart />,
+    iconBg: "#111111",
+    change: "Active",
+  },
+  {
+    label: "Total Orders",
+    key: "orders",
+    route: "/admin/orders",
+    icon: <AssignmentInd />,
+    iconBg: "#dc2626",
+    change: "Processing",
+  },
+  {
+    label: "Total Users",
+    key: "users",
+    route: "/admin/users",
+    icon: <People />,
+    iconBg: "#111111",
+    change: "Registered",
+  },
+];
 
 function Dashboard() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
-  const { products, loading, error } = useSelector((state) => state.products);
-  const { orders, error: ordersError } = useSelector(
-    (state) => state.allOrders
-  );
-  const { users, error: usersError } = useSelector((state) => state.allUsers);
 
+  const { products, loading, error } = useSelector((state) => state.products);
+  const { orders, error: ordersError } = useSelector((state) => state.allOrders);
+  const { users, error: usersError } = useSelector((state) => state.allUsers);
   const alert = useAlert();
 
   let OutOfStock = 0;
-  products &&
-    products.forEach((element) => {
-      // check how much items out of stocks in products array
-      if (element.stock === 0) {
-        OutOfStock += 1;
-      }
-    });
-
-
+  products && products.forEach((el) => { if (el.stock === 0) OutOfStock += 1; });
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors);
-    }
-    if (usersError) {
-      alert.error(usersError);
-      dispatch(clearErrors);
-    }
-    if (ordersError) {
-      alert.error(ordersError);
-      dispatch(clearErrors);
-    }
-    
+    if (error) { alert.error(error); dispatch(clearErrors); }
+    if (usersError) { alert.error(usersError); dispatch(clearErrors); }
+    if (ordersError) { alert.error(ordersError); dispatch(clearErrors); }
     dispatch(getAllOrders());
     dispatch(getAllUsers());
     dispatch(getAdminProducts());
   }, [dispatch, error, alert, ordersError, usersError]);
 
-  // togle handler =>
-  const toggleHandler = () => {
-    console.log("toggle");
-    setToggle(!toggle);
+  const toggleHandler = () => setToggle(!toggle);
+
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth > 999 && toggle) setToggle(false); };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [toggle]);
+
+  let totalAmount = 0;
+  orders && orders.forEach((item) => { totalAmount += item.totalPrice; });
+
+  const counts = {
+    products: products ? products.length : 0,
+    orders: orders ? orders.length : 0,
+    users: users ? users.length : 0,
   };
 
-  // total Amount Earned
-  let totalAmount = 0;
-  orders &&
-    orders.forEach((item) => {
-      totalAmount += item.totalPrice;
-    });
-
-  // chart js values for Line component
+  // Chart options — clean dark theme
   const lineOptions = {
     chart: {
-      type: "line",
-      style: {
-        fontFamily: "Roboto",
-        fontWeight: "900",
-      },
+      type: "area",
+      backgroundColor: "transparent",
+      style: { fontFamily: "Inter" },
+      height: 260,
     },
+    title: { text: null },
+    credits: { enabled: false },
     xAxis: {
       categories: ["Initial Amount", "Amount Earned"],
-      labels: {
-        style: {
-          fontWeight: "900",
-        },
-      },
+      labels: { style: { color: "#9ca3af", fontWeight: "600", fontFamily: "Inter" } },
+      lineColor: "rgba(255, 255, 255, 0.08)",
+      tickColor: "rgba(255, 255, 255, 0.08)",
     },
     yAxis: {
-      title: {
-        text: null,
-      },
-      labels: {
-        style: {
-          fontWeight: "900",
-        },
-      },
+      title: { text: null },
+      labels: { style: { color: "#9ca3af", fontFamily: "Inter" } },
+      gridLineColor: "rgba(255, 255, 255, 0.04)",
     },
-    series: [
-      {
-        name: "TOTAL AMOUNT",
-        data: [0, totalAmount],
+    series: [{
+      name: "Revenue (€)",
+      data: [0, totalAmount],
+      color: "#dc2626",
+      fillOpacity: 0.1,
+      lineWidth: 3,
+      marker: {
+        fillColor: "#111216",
+        lineColor: "#dc2626",
+        lineWidth: 2,
+        radius: 6,
+        symbol: "circle",
       },
-    ],
-    plotOptions: {
-      line: {
-        lineWidth: 4,
-        marker: {
-          enabled: true,
-        },
-        color: "black",
-      },
+    }],
+    legend: { itemStyle: { color: "#9ca3af", fontFamily: "Inter" } },
+    tooltip: {
+      backgroundColor: "#111216",
+      borderColor: "#dc2626",
+      style: { color: "#ffffff", fontFamily: "Inter" },
+      borderRadius: 8,
     },
+    plotOptions: { area: { fillOpacity: 0.08 } },
   };
-  // now set the Value of stock of the product for Doughnut component in  chart .
 
   const doughnutOptions = {
     chart: {
       type: "pie",
-      options3d: {
-        enabled: true,
-        alpha: 45,
-        beta: 0,
-      },
-      style: {
-        fontFamily: "Roboto",
-      },
+      backgroundColor: "transparent",
+      options3d: { enabled: true, alpha: 45, beta: 0 },
+      style: { fontFamily: "Inter" },
+      height: 260,
     },
-    title: {
-      text: "Product Stock Status",
-      align: "center",
-      style: {
-        color: "black",
-        fontWeight: "900",
-      },
-    },
-
-    accessibility: {
-      point: {
-        valueSuffix: "%",
-      },
-    },
+    title: { text: null },
+    credits: { enabled: false },
     tooltip: {
+      backgroundColor: "#111216",
+      borderColor: "#dc2626",
+      style: { color: "#ffffff", fontFamily: "Inter" },
       pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
     },
     plotOptions: {
@@ -403,213 +408,93 @@ function Dashboard() {
         allowPointSelect: true,
         cursor: "pointer",
         depth: 35,
+        colors: ["rgba(255, 255, 255, 0.08)", "#dc2626"],
         dataLabels: {
           enabled: true,
           format: "{point.name}",
-          style: {
-            fontWeight: "500",
-          },
+          style: { color: "#ffffff", fontFamily: "Inter", fontWeight: "600" },
         },
       },
     },
-    series: [
-      {
-        type: "pie",
-        name: "Share",
-        data: [
-          ["Out of Stock", products.length - OutOfStock],
-
-          {
-            name: "Out of Stock",
-            y: OutOfStock,
-            sliced: true,
-            selected: true,
-          },
-        ],
-      },
-    ],
+    series: [{
+      type: "pie",
+      name: "Share",
+      data: [
+        ["In Stock", products ? products.length - OutOfStock : 0],
+        { name: "Out of Stock", y: OutOfStock, sliced: true, selected: true },
+      ],
+    }],
   };
-
-  // to close the sidebar when the screen size is greater than 1000px
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 999 && toggle) {
-        setToggle(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [toggle]);
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
+      {loading ? <Loader /> : (
         <>
           <MetaData title="Dashboard - Admin Panel" />
-          <div className={classes.dashboard}>
-            <div
-              className={
-                !toggle ? `${classes.firstBox}` : `${classes.toggleBox}`
-              }
-            >
+          <div className={classes.root}>
+            {/* Sidebar */}
+            <div className={!toggle ? classes.sidebarCol : classes.toggleBox}>
               <Sidebar />
             </div>
 
-            <div className={classes.secondBox}>
-              <div className={classes.navBar}>
-                <Navbar toggleHandler={toggleHandler} />
-              </div>
+            {/* Main */}
+            <div className={classes.mainCol}>
+              <Navbar toggleHandler={toggleHandler} />
 
-              <div className={classes.summaryCard}>
-                <div
-                  className={classes.cardContainer}
-                  style={{
-                    backgroundImage: `url(${ProductImg})`,
-                    backgroundSize: "cover",
-                    transition: "transform 0.2s ease-in-out",
-                    cursor: "pointer",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                    },
-                  }}
-                  onClick={() => history.push("/admin/products")}
-                >
-                  <div className={classes.headerConetnt}>
-                    <ShoppingCart
-                      fontSize="large"
-                      style={{
-                        fontSize: "3rem",
-                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.25)",
-                      }}
-                    />
+              <div className={classes.pageBody}>
+                {/* Page heading */}
+                <div className={classes.pageHeading}>
+                  <div className={classes.headingDot} />
+                  <span className={classes.headingText}>Overview Statistics</span>
+                </div>
 
-                    <Typography variant="h6" className={classes.heading}>
-                      Total Products
-                    </Typography>
-                  </div>
-                  <div className={classes.textContainer}>
-                    <Typography variant="body2" className={classes.number}>
-                      {products && products.length}
-                    </Typography>
+                {/* Stat Cards */}
+                <div className={classes.statsGrid}>
+                  {statConfigs.map((card) => (
+                    <div
+                      key={card.key}
+                      className={classes.statCard}
+                      onClick={() => history.push(card.route)}
+                    >
+                      <div className={classes.statTop}>
+                        <div
+                          className={classes.statIconBox}
+                          style={{ background: card.iconBg }}
+                        >
+                          {card.icon}
+                        </div>
+                        <span className={classes.statChange}>{card.change}</span>
+                      </div>
+                      <div className={classes.statValue}>{counts[card.key]}</div>
+                      <div className={classes.statLabel}>{card.label}</div>
+                    </div>
+                  ))}
+
+                  {/* Revenue as 4th card */}
+                  <div className={classes.revenueCard}>
+                    <div className={classes.revenueIcon}>
+                      <BarChart />
+                    </div>
+                    <div className={classes.revenueLabel}>Total Revenue</div>
+                    <div className={classes.revenueValue}>€{totalAmount.toFixed(0)}</div>
+                    <div className={classes.revenueSubText}>↑ All time earnings</div>
                   </div>
                 </div>
 
-                <div
-                  className={classes.cardContainer}
-                  style={{
-                    backgroundImage: `url(${ordersImg})`,
-                    backgroundSize: "cover",
-                    transition: "transform 0.2s ease-in-out",
-                    cursor: "pointer",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                    },
-                  }}
-                  onClick={() => history.push("/admin/orders")}
-                >
-                  <div className={classes.headerConetnt}>
-                    <AssignmentInd
-                      fontSize="large"
-                      style={{
-                        fontSize: "3rem",
-                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                      }}
-                    />
-                    <Typography variant="h6" className={classes.heading}>
-                      Total Orders
-                    </Typography>
+                {/* Charts Row */}
+                <div className={classes.chartsGrid}>
+                  {/* Pie Chart */}
+                  <div className={classes.chartCard}>
+                    <div className={classes.chartLabel}>Stock Status</div>
+                    <HighchartsReact highcharts={Highcharts} options={doughnutOptions} />
                   </div>
-                  <div className={classes.textContainer}>
-                    <Typography variant="body2" className={classes.number}>
-                      {orders && orders.length}
-                    </Typography>
+
+                  {/* Line chart as big area */}
+                  <div className={classes.chartCard}>
+                    <div className={classes.chartLabel}>Revenue Trend</div>
+                    <HighchartsReact highcharts={Highcharts} options={lineOptions} />
                   </div>
                 </div>
-
-                <div
-                  className={classes.cardContainer}
-                  style={{
-                    backgroundImage: `url(${usersImg})`,
-                    backgroundSize: "cover",
-                    transition: "transform 0.2s ease-in-out",
-                    cursor: "pointer",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                    },
-                  }}
-                  onClick={() => history.push("/admin/users")}
-                >
-                  <div className={classes.headerConetnt}>
-                    <People
-                      fontSize="large"
-                      style={{
-                        fontSize: "3rem",
-                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                      }}
-                    />
-                    <Typography variant="h6" className={classes.heading}>
-                      Total Users
-                    </Typography>
-                  </div>
-                  <div className={classes.textContainer}>
-                    <Typography variant="body2" className={classes.number}>
-                      {users && users.length}
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-
-              <div className={classes.revenue}>
-                <div className={classes.doughnutChart}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={doughnutOptions}
-                  />
-                </div>
-
-                <div
-                  className={classes.revnueContainer}
-                  style={{
-                    backgroundImage: `url(${ProductImg})`,
-                    backgroundSize: "cover",
-                    transition: "transform 0.2s ease-in-out",
-                    borderRadius: "5px",
-
-                    width: "42%",
-                  }}
-                >
-                  <div className={classes.headerConetnt}>
-                    <BarChart
-                      fontSize="large"
-                      style={{
-                        fontSize: "3rem",
-                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                      }}
-                    />
-
-                    <Typography variant="h6" className={classes.heading}>
-                      Total Revenue
-                    </Typography>
-                  </div>
-                  <div className={classes.textContainer}>
-                    <Typography variant="body2" className={classes.number}>
-                      ₹{totalAmount.toFixed(2)}
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-
-              <div className={classes.lineChart}>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  options={lineOptions}
-                />
               </div>
             </div>
           </div>

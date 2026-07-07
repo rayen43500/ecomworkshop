@@ -32,7 +32,7 @@ import Select from "@material-ui/core/Select";
 import InfoIcon from "@mui/icons-material/Info";
 import MenuItem from "@material-ui/core/MenuItem";
 import Navbar from "./Navbar";
-import useStyles from "../User/LoginFromStyle";
+import useStyles from "./AdminFormStyle";
 function UpdateProduct() {
   const dispatch = useDispatch();
   const history = useHistory();

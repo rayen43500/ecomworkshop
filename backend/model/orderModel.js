@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema({
 
     country: {
       type: String,
-      required: true, // if only add here default value india
+      required: true,
     },
     pinCode: {
       type: Number,
@@ -82,17 +82,19 @@ const orderSchema = new mongoose.Schema({
     ref: "userModel",
     required: true,
   },
-  // payment status of product :
+  
+  // payment status — id and status are NOT required to support Cash on Delivery
   paymentInfo: {
     id: {
       type: String,
-      required: true,
+      required: false, // COD orders use "COD" as id
     },
     status: {
       type: String,
-      required: true,
+      required: false, // COD orders use "Cash on Delivery"
     },
   },
+
   // payment timing
   paidAt: {
     type: Date,

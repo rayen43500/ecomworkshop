@@ -53,16 +53,23 @@ const columns = [
   {
     field: "id",
     headerName: "Product ID",
-    minWidth: 230,
-    flex: 0.5,
+    minWidth: 100,
+    flex: 0.3,
     headerClassName: "column-header",
+    renderCell: (params) => {
+      const id = params.getValue(params.id, "id");
+      return (
+        <span style={{ fontFamily: "monospace", fontSize: "0.8rem", color: "#6b7280" }}>
+          {id ? `${id.substring(0, 8)}...` : ""}
+        </span>
+      );
+    }
   },
   {
     field: "name",
     headerName: "Name",
     minWidth: 150,
     flex: 0.5,
-    magin: "0 auto",
     headerClassName: "column-header hide-on-mobile",
   },
   {
@@ -70,42 +77,42 @@ const columns = [
     headerName: "Stock",
     type: "number",
     minWidth: 100,
-    flex: 0.5,
+    flex: 0.3,
     headerClassName: "column-header hide-on-mobile",
   },
   {
     field: "price",
     headerName: "Price",
     type: "number",
-    minWidth: 200,
-    flex: 0.5,
+    minWidth: 120,
+    flex: 0.4,
     headerClassName: "column-header hide-on-mobile",
   },
   {
     field: "actions",
     headerName: "Actions",
-    flex: 1,
+    flex: 0.3,
     sortable: false,
-    minWidth: 230,
+    minWidth: 120,
     headerClassName: "column-header1",
     renderCell: (params) => {
+      const id = params.getValue(params.id, "id");
       return (
-        <>
+        <div className="action-buttons-cell" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           <Link
-            to={`/admin/product/${params.getValue(params.id, "id")}`}
-            style={{ marginLeft: "1rem" }}
+            to={`/admin/product/${id}`}
+            className="icon-"
           >
-            <EditIcon className="icon-" />
+            <EditIcon />
           </Link>
-
-          <div
-            onClick={() =>
-              deleteProductHandler(params.getValue(params.id, "id"))
-            }
+          <button
+            onClick={() => deleteProductHandler(id)}
+            className="iconbtn"
+            style={{ border: "none", outline: "none", cursor: "pointer", padding: 0 }}
           >
-            <DeleteIcon className="iconbtn" />
-          </div>
-        </>
+            <DeleteIcon />
+          </button>
+        </div>
       );
     },
   },

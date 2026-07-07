@@ -25,9 +25,8 @@ import {
   orderDetialsReducer,
   allOrdersReducer,
   deletUpdateOrderReducer,
-  
-
 } from "./reducers/orderReducer";
+import { bannersReducer, bannerReducer } from "./reducers/bannerReducer";
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -47,7 +46,9 @@ const rootReducer = combineReducers({
   allUsers: allUsersReducer,
   userDetails: userDetailsReducer,
   deleteReview :deleteReviewReducer,
-  getAllReview : getALLReviewReducer
+  getAllReview : getALLReviewReducer,
+  bannersList: bannersReducer,
+  bannerAction: bannerReducer,
 });
 
 // get all Cart values from local storage and pass this initial state into store
@@ -65,10 +66,11 @@ let initialState = {
 
 const middleware = [thunk];
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
-);
+const composeEnhancers =
+  process.env.NODE_ENV === "development"
+    ? composeWithDevTools(applyMiddleware(...middleware))
+    : applyMiddleware(...middleware);
+
+const store = createStore(rootReducer, initialState, composeEnhancers);
 
 export default store;

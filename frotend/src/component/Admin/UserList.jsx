@@ -4,7 +4,6 @@ import { DataGrid } from "@material-ui/data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Button } from "@material-ui/core";
 import MetaData from "../layouts/MataData/MataData";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -23,11 +22,13 @@ function UserList() {
   );
   const alert = useAlert();
   const history = useHistory();
+
   const deleteUserHandler = (id) => {
     dispatch(deleteUser(id));
   };
 
   const [toggle, setToggle] = useState(false);
+
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -47,71 +48,87 @@ function UserList() {
     dispatch(getAllUsers());
   }, [dispatch, alert, error, deleteError, history, isDeleted, message]);
 
-  // Datagrid  values  and schema
-
   const columns = [
     {
-      field: "name",
-      headerName: "Name",
-      minWidth: 150,
-      flex: 0.5,
-      headerClassName: "column-header hide-on-mobile",
-    },
-
-    {
-      field: "email",
-      headerName: "Email",
-      minWidth: 150,
-      flex: 0.7,
-      headerClassName: "column-header hide-on-mobile",
-    },
-
-    {
-      field: "role",
-      headerName: "Role",
-      type: "number",
-      minWidth: 150,
-      flex: 0.3,
-      headerClassName: "column-header hide-on-mobile",
-      cellClassName: (params) => {
-        return params.getValue(params.id, "role") === "admin"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "actions",
-      flex: 0.3,
-      headerName: "Actions",
-      minWidth: 150,
-      type: "number",
-
+      field: "id",
+      headerName: "User ID",
+      width: 90,
+      flex: 0.15,
+      sortable: false,
       headerClassName: "column-header hide-on-mobile",
       renderCell: (params) => {
+        const id = params.getValue(params.id, "id");
         return (
-          <>
-            <Link to={`/admin/user/${params.getValue(params.id, "id")}`}>
-              <EditIcon className="icon-" />
-            </Link>
-
-            <Button
-              onClick={() =>
-                deleteUserHandler(params.getValue(params.id, "id"))
-              }
-            >
-              <DeleteIcon className="iconbtn" />
-            </Button>
-          </>
+          <span className="cell-id" title={id}>
+            {id ? `${id.substring(0, 6)}…` : ""}
+          </span>
         );
       },
     },
     {
-      field: "id",
-      headerName: "User ID",
-      minWidth: 180,
-      flex: 0.8,
+      field: "name",
+      headerName: "Name",
+      minWidth: 120,
+      flex: 0.25,
+      headerClassName: "column-header",
+      renderCell: (params) => (
+        <span className="cell-name">{params.getValue(params.id, "name")}</span>
+      ),
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      minWidth: 160,
+      flex: 0.35,
+      headerClassName: "column-header hide-on-tablet",
+      renderCell: (params) => (
+        <span className="cell-email">{params.getValue(params.id, "email")}</span>
+      ),
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      width: 100,
+      flex: 0.15,
+      headerClassName: "column-header",
+      renderCell: (params) => {
+        const role = params.getValue(params.id, "role");
+        return (
+          <span className={role === "admin" ? "greenColor" : "redColor"}>
+            {role}
+          </span>
+        );
+      },
+    },
+    {
+      field: "actions",
+      flex: 0.15,
+      headerName: "Actions",
+      width: 110,
       sortable: false,
-      headerClassName: "column-header hide-on-mobile",
+      headerClassName: "column-header",
+      renderCell: (params) => {
+        const id = params.getValue(params.id, "id");
+        return (
+          <div className="action-buttons-cell">
+            <Link
+              to={`/admin/user/${id}`}
+              className="icon- admin-icon-btn admin-icon-btn--edit"
+              aria-label="Edit user"
+            >
+              <EditIcon />
+            </Link>
+            <button
+              onClick={() => deleteUserHandler(id)}
+              className="iconbtn admin-icon-btn admin-icon-btn--delete"
+              aria-label="Delete user"
+              type="button"
+            >
+              <DeleteIcon />
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -127,13 +144,10 @@ function UserList() {
       });
     });
 
-  // togle handler =>
   const toggleHandler = () => {
-    console.log("toggle");
     setToggle(!toggle);
   };
 
-  // to close the sidebar when the screen size is greater than 1000px
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 999 && toggle) {
@@ -142,10 +156,7 @@ function UserList() {
     };
 
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [toggle]);
 
   return (
@@ -164,14 +175,18 @@ function UserList() {
             <div className="list-table">
               <Navbar toggleHandler={toggleHandler} />
               <div className="productListContainer">
-                <h4 id="productListHeading">ALL USERS</h4>
+                <h4 id="productListHeading">All Users</h4>
 
                 <DataGrid
                   rows={rows}
                   columns={columns}
                   pageSize={10}
+                  rowsPerPageOptions={[10, 25, 50]}
                   disableSelectionOnClick
+                  disableColumnMenu
                   className="productListTable"
+                  rowHeight={52}
+                  headerHeight={44}
                   autoHeight
                 />
               </div>

@@ -19,7 +19,7 @@ function Header() {
 
   const [searchBarActive, setSearchBarActive] = useState(false);
 
-  const [country, setCountry] = useState("in"); // this is for flag
+  const [country, setCountry] = useState("fr"); // this is for flag
   const [sideMenu, setSideMenu] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 

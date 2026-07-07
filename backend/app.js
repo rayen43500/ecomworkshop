@@ -26,6 +26,7 @@ const order = require("./route/orderRoute");
 const product = require("./route/productRoute")
 const payment = require("./route/paymentRoute");
 const health = require("./route/healthRoute");
+const banner = require("./route/bannerRoute");
 
 // Add request logging middleware (only in development or when LOG_REQUESTS is true)
 if (process.env.NODE_ENV === 'development' || process.env.LOG_REQUESTS === 'true') {
@@ -45,6 +46,7 @@ app.use("/api/v1", user);
 app.use("/api/v1", order);
 app.use("/api/v1", payment);
 app.use("/api/v1", health);
+app.use("/api/v1", banner);
 
 // Error middleware must come after all routes
 app.use(errorMiddleware);

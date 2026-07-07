@@ -79,27 +79,39 @@ const columns = [
   {
     field: "id",
     headerName: "Order ID",
-    minWidth: 120,
-    flex: 0.7,
+    minWidth: 100,
+    flex: 0.3,
     headerClassName: "column-header",
+    renderCell: (params) => {
+      const id = params.getValue(params.id, "id");
+      return (
+        <span style={{ fontFamily: "monospace", fontSize: "0.8rem", color: "#6b7280" }}>
+          {id ? `${id.substring(0, 8)}...` : ""}
+        </span>
+      );
+    }
   },
   {
     field: "status",
     headerName: "Status",
-    minWidth: 100,
-    flex: 0.8,
+    minWidth: 120,
+    flex: 0.3,
     headerClassName: "column-header hide-on-mobile",
     renderCell: (params) => {
-      const color = params.value === "Delivered" ? "green" : "red";
-      return <div style={{ color, fontWeight: 600 }}>{params.value}</div>;
+      const isDelivered = params.value === "Delivered";
+      return (
+        <span className={isDelivered ? "greenColor" : "redColor"}>
+          {params.value}
+        </span>
+      );
     },
   },
   {
     field: "itemsQty",
     headerName: "Items Qty",
     type: "number",
-    minWidth: 120,
-    flex: 0.8,
+    minWidth: 100,
+    flex: 0.3,
     headerClassName: "column-header hide-on-mobile",
   },
   {
@@ -107,28 +119,31 @@ const columns = [
     headerName: "Amount",
     type: "number",
     minWidth: 120,
-    flex: 0.8,
+    flex: 0.4,
     headerClassName: "column-header hide-on-mobile",
   },
   {
     field: "actions",
     headerName: "Actions",
-    flex: 1.5,
+    flex: 0.3,
     sortable: false,
-    minWidth: 150,
+    minWidth: 120,
     headerClassName: "column-header1",
     renderCell: (params) => {
+      const id = params.getValue(params.id, "id");
       return (
-        <>
-          <Link to={`/admin/order/${params.getValue(params.id, "id")}`}>
-            <EditIcon className="icon-" />
+        <div className="action-buttons-cell" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <Link to={`/admin/order/${id}`} className="icon-">
+            <EditIcon />
           </Link>
-          <Link
-            onClick={() => deleteOrderHandler(params.getValue(params.id, "id"))}
+          <button
+            onClick={() => deleteOrderHandler(id)}
+            className="iconbtn"
+            style={{ border: "none", outline: "none", cursor: "pointer", padding: 0 }}
           >
-            <DeleteIcon className="iconbtn" />
-          </Link>
-        </>
+            <DeleteIcon />
+          </button>
+        </div>
       );
     },
   },

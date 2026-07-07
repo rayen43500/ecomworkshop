@@ -22,7 +22,7 @@ import InfoIcon from "@mui/icons-material/Info";
 
 import Navbar from "./Navbar";
 
-import useStyles from "../User/LoginFromStyle";
+import useStyles from "./AdminFormStyle";
 import {
   Avatar,
   TextField,

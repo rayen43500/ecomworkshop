@@ -1,12 +1,12 @@
-// dispaly Money In indian Formate
+// display Money In Euro format
 export const dispalyMoney = function(num) {
-  const numFormate = new Intl.NumberFormat("en-IN", {
+  const numFormate = new Intl.NumberFormat("fr-FR", {
     style: "currency",
-    currency: "INR",
+    currency: "EUR",
+    maximumFractionDigits: 0,
   });
 
-  const arr = numFormate.format(num).split(".", 1);
-  return arr[0];
+  return numFormate.format(num);
 };
 
 // Calculate Discount Percentage

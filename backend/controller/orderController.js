@@ -15,17 +15,20 @@ exports.newOrder = asyncWrapper(async (req, res, next) => {
     totalPrice,
   } = req.body;
 
+  // For COD orders, paymentInfo.id will be "COD"
+  const isCOD = paymentInfo && paymentInfo.id === "COD";
+
   // create order :
   const order = await orderModel.create({  
     shippingInfo,
     orderItems,
-    paymentInfo,
+    paymentInfo: paymentInfo || { id: "COD", status: "Cash on Delivery" },
     itemsPrice,
-    taxPrice,
-    shippingPrice,
+    taxPrice: taxPrice || 0,
+    shippingPrice: shippingPrice || 0,
     totalPrice,
     user: req.user._id, // from authenticated user
-    paidtAt: Date.now(),
+    paidAt: isCOD ? undefined : Date.now(),
   });
 
   res.status(201).json({
