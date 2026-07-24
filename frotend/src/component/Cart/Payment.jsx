@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layouts/MataData/MataData";
 import { useAlert } from "react-alert";
-import axios from "axios";
+import axios from "../../utils/axios";
 import { useHistory } from "react-router-dom";
 import OrderDetailsSection from "./OrderDetails";
 import DummyCard from "./DummyCard";

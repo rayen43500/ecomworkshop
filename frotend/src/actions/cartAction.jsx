@@ -3,7 +3,7 @@ import {
   REMOVE_CART_ITEM,
   SAVE_SHIPPING_INFO,
 } from "../constants/cartConstant";
-import axios from "axios";
+import axios from "../utils/axios";
 
 // Add to Cart
 export const addItemToCart = (id, quantity) => async (dispatch, getState) => {

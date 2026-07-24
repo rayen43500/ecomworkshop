@@ -19,14 +19,21 @@ process.on("uncaughtException", (err) => {
 
 
 //config =>
+// In production (Render.com), env vars are set via the dashboard.
+// In development, load from config.env file.
 const backendConfigDir = path.join(__dirname, "config");
 const primaryEnvPath = path.join(backendConfigDir, "config.env");
 const fallbackEnvPath = path.join(backendConfigDir, "config.env.example");
-const envPath = fs.existsSync(primaryEnvPath) ? primaryEnvPath : fallbackEnvPath;
 
-dotenv.config({ path: envPath });
-
-console.log(`Loaded environment from: ${envPath}`);
+if (fs.existsSync(primaryEnvPath)) {
+  dotenv.config({ path: primaryEnvPath });
+  console.log(`Loaded environment from: ${primaryEnvPath}`);
+} else if (fs.existsSync(fallbackEnvPath)) {
+  dotenv.config({ path: fallbackEnvPath });
+  console.log(`Loaded environment from: ${fallbackEnvPath}`);
+} else {
+  console.log('No local config file found — using platform environment variables');
+}
 
 // Validate essential environment variables
 const requiredEnvVars = ['JWT_SECRET'];

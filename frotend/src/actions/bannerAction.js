@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axios";
 import {
   ALL_BANNERS_REQUEST,
   ALL_BANNERS_SUCCESS,

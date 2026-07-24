@@ -13,11 +13,26 @@ const fallbackEnvPath = path.join(__dirname, "config", "config.env.example");
 
 require("dotenv").config({ path: fs.existsSync(primaryEnvPath) ? primaryEnvPath : fallbackEnvPath });
 
+// CORS configuration for Cloudflare Pages frontend
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:3000",
+  "http://localhost:3001",
+].filter(Boolean); // Remove undefined values
 
-
-
-
-
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.some(allowed => origin === allowed || origin.endsWith('.pages.dev'))) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+}));
 
 // routes
 
@@ -39,7 +54,6 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(fileUpload());
-app.use(cors());
 
 app.use("/api/v1", product);
 app.use("/api/v1", user);
@@ -50,15 +64,6 @@ app.use("/api/v1", banner);
 
 // Error middleware must come after all routes
 app.use(errorMiddleware);
-const __dirname1 = path.resolve();
-
-const projectRoot = path.resolve(__dirname, "..");
-
-app.use(express.static(path.join(projectRoot, "frotend", "build")));
-
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(projectRoot, "frotend", "build", "index.html"))
-);
-
 
 module.exports = app;
+

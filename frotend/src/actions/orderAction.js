@@ -19,7 +19,7 @@ import {
   UPDATE_ORDER_SUCCESS,
   UPDATE_ORDER_FAIL,
 } from "../constants/orderConstant";
-import axios from "axios";
+import axios from "../utils/axios";
 
 
 export const createOrder = (order) => async (dispatch) => {

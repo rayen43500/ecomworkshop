@@ -29,7 +29,7 @@ import UpdateProfile from "../component/User/UpdateProfile";
 import { useDispatch } from "react-redux";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
+import axios from "../utils/axios";
 import { load_UserProfile } from "../actions/userAction"
 function Users() {
    const location = useLocation();
